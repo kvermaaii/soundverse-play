@@ -17,6 +17,12 @@ class SoundClipCreate(SoundClipBase):
     pass
 
 
+class SoundClipListItem(SoundClipBase):
+    id: int
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class SoundClipResponse(SoundClipBase):
     id: int
     play_count: int
@@ -41,7 +47,7 @@ class SoundClipStats(BaseModel):
 
 
 class ClipListResponse(BaseModel):
-    clips: list[SoundClipResponse]
+    clips: list[SoundClipListItem]
     count: int
 
 

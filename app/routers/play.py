@@ -10,6 +10,7 @@ from app.metrics import STREAM_COUNTER, STREAM_LATENCY
 from app.schemas import (
     ClipListResponse,
     SoundClipCreate,
+    SoundClipListItem,
     SoundClipResponse,
     SoundClipStats,
 )
@@ -34,7 +35,7 @@ def list_clips(
 ) -> ClipListResponse:
     clips = clip_service.get_all_clips(db)
     return ClipListResponse(
-        clips=[SoundClipResponse.model_validate(c) for c in clips],
+        clips=[SoundClipListItem.model_validate(c) for c in clips],
         count=len(clips),
     )
 
