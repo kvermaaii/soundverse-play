@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: soundverse-play
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: soundverse-db
+          property: connectionString
+      - key: API_KEY
+        sync: false
+      - key: DEBUG
+        value: "false"
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+
+databases:
+  - name: soundverse-db
+    plan: free
+    databaseName: soundverse
+    region: oregon
