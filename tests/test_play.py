@@ -33,9 +33,7 @@ class TestStreamClip:
         # Mock httpx.Client to avoid real HTTP calls
         mock_response = MagicMock()
         mock_response.raise_for_status = MagicMock()
-        mock_response.iter_bytes = MagicMock(
-            return_value=iter([b"fake-audio-data"])
-        )
+        mock_response.iter_bytes = MagicMock(return_value=iter([b"fake-audio-data"]))
         mock_response.__enter__ = MagicMock(return_value=mock_response)
         mock_response.__exit__ = MagicMock(return_value=False)
 
@@ -44,12 +42,8 @@ class TestStreamClip:
         mock_client.__enter__ = MagicMock(return_value=mock_client)
         mock_client.__exit__ = MagicMock(return_value=False)
 
-        with patch(
-            "app.services.clip_service.httpx.Client", return_value=mock_client
-        ):
-            response = client.get(
-                f"/play/{clip_id}/stream", headers=api_headers
-            )
+        with patch("app.services.clip_service.httpx.Client", return_value=mock_client):
+            response = client.get(f"/play/{clip_id}/stream", headers=api_headers)
             assert response.status_code == 200
 
         db_session.refresh(seed_clips[0])
@@ -59,15 +53,11 @@ class TestStreamClip:
         response = client.get("/play/999/stream", headers=api_headers)
         assert response.status_code == 404
 
-    def test_stream_returns_audio_content_type(
-        self, client, api_headers, seed_clips
-    ):
+    def test_stream_returns_audio_content_type(self, client, api_headers, seed_clips):
         clip_id = seed_clips[0].id
         mock_response = MagicMock()
         mock_response.raise_for_status = MagicMock()
-        mock_response.iter_bytes = MagicMock(
-            return_value=iter([b"fake-audio"])
-        )
+        mock_response.iter_bytes = MagicMock(return_value=iter([b"fake-audio"]))
         mock_response.__enter__ = MagicMock(return_value=mock_response)
         mock_response.__exit__ = MagicMock(return_value=False)
 
@@ -76,12 +66,8 @@ class TestStreamClip:
         mock_client.__enter__ = MagicMock(return_value=mock_client)
         mock_client.__exit__ = MagicMock(return_value=False)
 
-        with patch(
-            "app.services.clip_service.httpx.Client", return_value=mock_client
-        ):
-            response = client.get(
-                f"/play/{clip_id}/stream", headers=api_headers
-            )
+        with patch("app.services.clip_service.httpx.Client", return_value=mock_client):
+            response = client.get(f"/play/{clip_id}/stream", headers=api_headers)
             assert response.headers["content-type"] == "audio/mpeg"
 
 

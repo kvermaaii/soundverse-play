@@ -30,7 +30,10 @@ def increment_play_count(db: Session, clip_id: int) -> None:
 
 def stream_clip_audio(audio_url: str, chunk_size: int) -> Generator[bytes, None, None]:
     try:
-        with httpx.Client(follow_redirects=True) as client, client.stream("GET", audio_url) as response:
+        with (
+            httpx.Client(follow_redirects=True) as client,
+            client.stream("GET", audio_url) as response,
+        ):
             response.raise_for_status()
             yield from response.iter_bytes(chunk_size=chunk_size)
     except httpx.HTTPStatusError as exc:
